@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Morning Reporting Form</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Segoe UI, Arial;
+  background:linear-gradient(135deg,#e0f7fa,#fce4ec);
+}
+header{
+  background:linear-gradient(90deg,#ff6f00,#ff8f00);
+  color:#fff;
+  text-align:center;
+  padding:15px;
+  height: 140px;
+}
+ img{height:65px;
+border-radius: 50px;}
+.container{
+  max-width:900px;
+  margin:15px auto;
+  background:black;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+.notice{
+  background:#e3f2fd;
+  border-left:5px solid #1e88e5;
+  padding:10px;
+  margin-bottom:15px;
+  font-size:14px;
+}
+h2{
+  margin-top:20px;
+  font-size:18px;
+  color:red;
+  border-left:5px solid #3f51b5;
+  padding-left:10px;
+  
+}
+label{
+  display:block;
+  margin-top:12px;
+  font-weight:600;
+}
+input,textarea{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:8px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+textarea{resize:vertical}
+button{
+  width:100%;
+  padding:15px;
+  margin-top:18px;
+  font-size:17px;
+  font-weight:bold;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+.location-btn{
+  background:linear-gradient(90deg,#00c853,#64dd17);
+  color:#fff;
+}
+.submit-btn{
+  background:linear-gradient(90deg,#1e88e5,#42a5f5);
+  color:#fff;
+}
+.footer{
+  text-align:center;
+  font-size:14px;
+  color:#555;
+  padding:15px;
+}
+label{
+    color: white;
+}
+  img{
+    border-radius: 50px;
+  }
+  a{
+    font-size: 21px;
+    
+    
+  }
+
+</style>
+</head>
+
+<body>
+
+<header>
+  <img src="lostom - Copy.jpg"><br>
+  <br>
+  <a href="https://www.lostomindustries.com">www.lostomindustries.com</a>
+</header>
+
+<div class="container">
+
+<div class="notice">
+📍 <b>Get Live Location</b> allow it
+</div>
+
+<form onsubmit="return submitReport()">
+
+<h2>1. Basic Details</h2>
+
+<label>Date</label>
+<input type="date" id="date" required>
+
+<label>Staff Name</label>
+<input type="text" id="staffName" required>
+
+<label>Staff ID</label>
+<input type="text" id="staffid">
+
+<label>Area / Route</label>
+<input type="text" id="area">
+
+<label>Reporting Time</label>
+<input type="time" id="time">
+
+<h2>2. Today’s Plan</h2>
+
+<label>Today Visit Target</label>
+<input type="number" id="visit">
+
+<label>Planned Parties Name</label>
+<textarea id="parties"></textarea>
+
+<label>Today Sales Target (₹)</label>
+<input type="number" id="sales">
+
+<h2>3. Stock Status</h2>
+
+<label>Product Name</label>
+<input type="text" id="product">
+
+<label>Opening Stock</label>
+<input type="number" id="stock">
+
+<h2>4. Cash / Outstanding</h2>
+
+<label>Yesterday Cash Collected (₹)</label>
+<input type="number" id="cash">
+
+<label>Outstanding To Be Collected Today (₹)</label>
+<input type="number" id="outstanding">
+
+<h2>5. Remarks / Issues</h2>
+
+<label>Remarks</label>
+<textarea id="remarks"></textarea>
+
+<label>Staff Signature</label>
+<input type="text" id="signature">
+
+<label>Manager Review</label>
+<input type="text" id="manager">
+
+<h2>Live Location</h2>
+
+<input type="hidden" id="lat">
+<input type="hidden" id="lon">
+
+<label>Google Map Location</label>
+<input type="text" id="mapLink" readonly>
+
+<button type="button" class="location-btn" onclick="getLocation()">
+📍 Get Live Location
+</button>
+
+<button type="submit" class="submit-btn">
+✅ Submit Morning Report
+</button>
+
+</form>
+</div>
+
+<div class="footer">
+© 2026 Lostom snacks| All Rights Reserved
+</div>
+<script>
+
+function el(id){
+  let field = document.getElementById(id);
+  return field ? field.value : "";
+}
+
+function getLocation(){
+  if(!navigator.geolocation){
+    alert("Geolocation not supported");
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    function(pos){
+      let lat = pos.coords.latitude;
+      let lon = pos.coords.longitude;
+
+      document.getElementById("lat").value = lat;
+      document.getElementById("lon").value = lon;
+      document.getElementById("mapLink").value =
+        "https://www.google.com/maps?q=" + lat + "," + lon;
+
+      alert("✅ Location captured");
+    },
+    function(){
+      alert("❌ Please allow location access");
+    },
+    { enableHighAccuracy:true }
+  );
+}
+
+function submitReport(){
+
+  if(el("lat") === ""){
+    alert("⚠️ Pehle Get Live Location dabayein");
+    return false;
+  }
+
+  let message =
+"🟢 Morning Reporting Form\n\n"+
+"📅 Date: " + el("date") + "\n"+
+"👤 Staff Name: " + el("staffName") + "\n"+
+"🆔 Staff ID: " + el("staffid") + "\n"+
+"📍 Area: " + el("area") + "\n"+
+"⏰ Reporting Time: " + el("time") + "\n\n"+
+"🎯 Visit Target: " + el("visit") + "\n"+
+"🏪 Planned Parties: " + el("parties") + "\n"+
+"💰 Sales Target: ₹" + el("sales") + "\n\n"+
+"📦 Product: " + el("product") + "\n"+
+"📊 Opening Stock: " + el("stock") + "\n\n"+
+"💵 Cash Collected: ₹" + el("cash") + "\n"+
+"📌 Outstanding: ₹" + el("outstanding") + "\n\n"+
+"📝 Remarks: " + el("remarks") + "\n"+
+"✍ Staff Sign: " + el("signature") + "\n"+
+"👨‍💼 Manager Review: " + el("manager") + "\n\n"+
+"📍 Location: " + el("mapLink");
+
+  let whatsappNumber = "917033810886"; 
+
+  let url = "https://wa.me/" + whatsappNumber +
+            "?text=" + encodeURIComponent(message);
+
+  window.open(url, "_blank");
+  return false;
+}
+
+</script>
+
+
+</body>
+</html>
